@@ -75,18 +75,6 @@ string genitem(string sign, string value, string conn, char flag) //生成极小
 
 int main()
 {
-    // Binclass B("10010");
-    // Binclass *c=new Binclass("0010011");
-    // cout<<"hello class"<<endl;
-    // cout<<B.value<<" bin: "<<B.to_s()<<endl;
-    // cout<<c->value<<" bin: "<<c->to_s()<<endl;
-    // B++;(*c)++;
-    // cout<<B.value<<" bin: "<<B.to_s()<<endl;
-    //  cout<<c->value<<" bin: "<<c->to_s()<<endl;
-    // cout<<(B<(*c))<<endl;
-    // delete c;
-    // int val=(new Binclass("0100110"))->value;
-    // cout<<val;
     string Extract = "", Combine = "", sign, value;
     int itemNum, len;
     Binclass *begin, *end;
