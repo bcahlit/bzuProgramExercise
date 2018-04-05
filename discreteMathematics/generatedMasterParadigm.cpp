@@ -76,36 +76,35 @@ int main()
 {
     string Extract = "", Combine = "", sign, value;
     int itemNum, len;
-    Binclass *begin, *end;
+    
     char Type;
     cin >> sign >> itemNum >> Type;
     len = sign.length();
-    begin = new Binclass(0, len);
-    end = new Binclass(pow(2, len), len);
+    Binclass begin = Binclass(0, len);
+    Binclass end = Binclass(pow(2, len), len);
     for (int i = 0; i < itemNum; i++)
     {
         cin >> value;
-        Binclass *latterEnd = new Binclass(value);
-        for (; (*begin) < (*latterEnd); (*begin)++)
+        Binclass latterEnd = Binclass(value);
+        for (; begin < latterEnd; begin++)
         {
             if (Type == 'M')
-                Extract += "(" + genitem(sign, begin->to_s(), "\\wedge ", '0') + ")\\vee ";
+                Extract += "(" + genitem(sign, begin.to_s(), "\\wedge ", '0') + ")\\vee ";
             if (Type == 'm')
-                Combine += "(" + genitem(sign, begin->to_s(), "\\vee ", '1') + ")\\wedge ";
+                Combine += "(" + genitem(sign, begin.to_s(), "\\vee ", '1') + ")\\wedge ";
         }
         if (Type == 'M')
-            Combine += "(" + genitem(sign, begin->to_s(), "\\vee ", '1') + ")\\wedge ";
+            Combine += "(" + genitem(sign, begin.to_s(), "\\vee ", '1') + ")\\wedge ";
         if (Type == 'm')
-            Extract += "(" + genitem(sign, begin->to_s(), "\\wedge ", '0') + ")\\vee ";
-        (*begin)++;
-        delete latterEnd;
+            Extract += "(" + genitem(sign, begin.to_s(), "\\wedge ", '0') + ")\\vee ";
+        begin++;
     }
-    for (; (*begin) < (*end); (*begin)++)
+    for (; begin < end; begin++)
     {
         if (Type == 'M')
-            Extract += "(" + genitem(sign, begin->to_s(), "\\wedge ", '0') + ")\\vee ";
+            Extract += "(" + genitem(sign, begin.to_s(), "\\wedge ", '0') + ")\\vee ";
         if (Type == 'm')
-            Combine += "(" + genitem(sign, begin->to_s(), "\\vee ", '1') + ")\\wedge ";
+            Combine += "(" + genitem(sign, begin.to_s(), "\\vee ", '1') + ")\\wedge ";
     }
     if(Combine.length()>0)cout << Combine.substr(0,Combine.length()-7) << endl;
     else cout<<"NULL"<<endl;
