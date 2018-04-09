@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "iostream": "cpp",
+        "array": "cpp",
+        "initializer_list": "cpp",
+        "string_view": "cpp",
+        "chrono": "cpp",
+        "limits": "cpp",
+        "ostream": "cpp"
+    }
+}
