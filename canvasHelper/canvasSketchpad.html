@@ -7,15 +7,28 @@
 </head>
 
 <body>
-    <canvas id="background" width="800" height="400" style="border:solid; position:absolute; z-index: 0">
-    </canvas>
-    <canvas id="leave1" width="800" height="400" style="border:solid; position:absolute; z-index: 1">
-        你的浏览器不支持canvas画布元素，请更新浏览器获得演示效果。
-    </canvas>
+    <div style="margin: 0 auto;width: 800px;height: 600px;">
+
+
+        <canvas id="background" width="800" height="600" style="border:solid; position:absolute; z-index: 0">
+        </canvas>
+        <canvas id="leave1" width="800" height="600" style="border:solid; position:absolute; z-index: 1">
+            你的浏览器不支持canvas画布元素，请更新浏览器获得演示效果。
+        </canvas>
+    </div>
+    <!-- <script type="text/javascript" src="CVIGraph/Color.js"></script> -->
+    <!-- <script type="text/javascript" src="CVIGraph/geometry/Bezier.js"></script> -->
+    <script type="text/javascript" src="CVIGraph/geometry/Geometry.js"></script>
+    <!-- <script type="text/javascript" src="CVIGraph/geometry/Point.js"></script> -->
+    <script type="text/javascript" src="CVIGraph/geometry/Rectangle.js"></script>
+    <script type="text/javascript" src="CVIGraph/geometry/Size.js"></script>
+    <script type="text/javascript" src="CVIGraph/shape/CVIShapeBase.js"></script>
+    <script type="text/javascript" src="CVIGraph/shape/CVIGraph.js"></script>
     <script type="text/javascript">
         // 背景画布
         var backCanvas = document.getElementById("background");
         var backContext = backCanvas.getContext("2d");
+        
 
         //前景画布
         var canvas = document.getElementById("leave1");
@@ -23,9 +36,15 @@
         canvas.addEventListener("mousedown", function (e) {
             var mouseX = e.pageX - canvas.clientLeft;   // 鼠标相对页面坐标-画布距离边缘距离
             var mouseY = e.pageY - canvas.clientTop;
-            x=mouseX;y=mouseY
-            begin=false
+            x = mouseX; y = mouseY
+            begin = false
         }, false)
+        function mix(){
+            backContext.save()
+            backContext.globalCompositeOperation="destination-over";
+            backContext.drawImage(layer1,0,0,800,600,0,0,800,600)
+            backContext.restore();
+        }
     </script>
 </body>
 
