@@ -1,1 +1,32 @@
- 
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>分割动画</title>
+    <meta charset="utf-8">
+</head>
+
+<body>
+    <canvas id="background" width="800" height="400" style="border:solid; position:absolute; z-index: 0">
+    </canvas>
+    <canvas id="leave1" width="800" height="400" style="border:solid; position:absolute; z-index: 1">
+        你的浏览器不支持canvas画布元素，请更新浏览器获得演示效果。
+    </canvas>
+    <script type="text/javascript">
+        // 背景画布
+        var backCanvas = document.getElementById("background");
+        var backContext = backCanvas.getContext("2d");
+
+        //前景画布
+        var canvas = document.getElementById("leave1");
+        var context = canvas.getContext("2d");
+        canvas.addEventListener("mousedown", function (e) {
+            var mouseX = e.pageX - canvas.clientLeft;   // 鼠标相对页面坐标-画布距离边缘距离
+            var mouseY = e.pageY - canvas.clientTop;
+            x=mouseX;y=mouseY
+            begin=false
+        }, false)
+    </script>
+</body>
+
+</html>
