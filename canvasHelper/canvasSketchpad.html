@@ -1,49 +1,131 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <title>分割动画</title>
+    <title>画板</title>
     <meta charset="utf-8">
 </head>
-
 <body>
-    <div style="margin: 0 auto;width: 800px;height: 600px;">
-
-
+    <div style="width: 800px;height: 600px;">
         <canvas id="background" width="800" height="600" style="border:solid; position:absolute; z-index: 0">
         </canvas>
         <canvas id="leave1" width="800" height="600" style="border:solid; position:absolute; z-index: 1">
             你的浏览器不支持canvas画布元素，请更新浏览器获得演示效果。
         </canvas>
     </div>
-    <!-- <script type="text/javascript" src="CVIGraph/Color.js"></script> -->
-    <!-- <script type="text/javascript" src="CVIGraph/geometry/Bezier.js"></script> -->
+    <div style="margin-top: 10px">
+        <button onclick="mystatus.shape=REACT">矩形</button>
+        <button onclick="mystatus.shape=ROUNDREACT">圆角矩形</button>
+        <button onclick="mystatus.shape=LINE">线段</button>
+        <button onclick="mystatus.shape=ELLIPSE">椭圆</button>
+        <button onclick="mystatus.shape=STAR">星</button>
+        <button onclick="mystatus.shape=POLYGON">多边形</button>
+        <button onclick="mystatus.shape=PINCL">笔</button>
+        <input id="inputNum" value="5" placeholder="输入多边形的边数,或者星型的角数" />
+    </div>
+
+    <script type="text/javascript" src="CVIGraph/Color.js"></script>
+    <script type="text/javascript" src="CVIGraph/geometry/Bezier.js"></script>
     <script type="text/javascript" src="CVIGraph/geometry/Geometry.js"></script>
-    <!-- <script type="text/javascript" src="CVIGraph/geometry/Point.js"></script> -->
+    <script type="text/javascript" src="CVIGraph/geometry/Point.js"></script>
     <script type="text/javascript" src="CVIGraph/geometry/Rectangle.js"></script>
     <script type="text/javascript" src="CVIGraph/geometry/Size.js"></script>
     <script type="text/javascript" src="CVIGraph/shape/CVIShapeBase.js"></script>
     <script type="text/javascript" src="CVIGraph/shape/CVIGraph.js"></script>
+
     <script type="text/javascript">
         // 背景画布
         var backCanvas = document.getElementById("background");
         var backContext = backCanvas.getContext("2d");
-        
+        var mystatus = {shape:7,drag:false};
+        console.log(mystatus.drag)
+        var cVI = new CVIGraph();
+        cVI.gLineStyle(cvi.c3b(0, 0, 0), 2)
+        const REACT = 1,
+            ROUNDREACT = 2,
+            LINE = 3,
+            ELLIPSE = 4,
+            STAR = 5,
+            POLYGON = 6,
+            PINCL = 7;
 
         //前景画布
-        var canvas = document.getElementById("leave1");
-        var context = canvas.getContext("2d");
-        canvas.addEventListener("mousedown", function (e) {
-            var mouseX = e.pageX - canvas.clientLeft;   // 鼠标相对页面坐标-画布距离边缘距离
-            var mouseY = e.pageY - canvas.clientTop;
-            x = mouseX; y = mouseY
-            begin = false
+        var layer1 = document.getElementById("leave1");
+        var layer1_context = layer1.getContext("2d");
+        var buttonNum = document.getElementById("inputNum")
+        var track=[]
+        console.log(buttonNum.value)
+        layer1.addEventListener("mousedown", function (e) {
+            var mouseX = e.pageX - layer1.clientLeft;   // 鼠标相对页面坐标-画布距离边缘距离
+            var mouseY = e.pageY - layer1.clientTop;
+            mystatus.drag = true;
+            mystatus.currentpoint = cvi.p(mouseX, mouseY)
+            track=[cvi.p(mouseX, mouseY)]
         }, false)
-        function mix(){
+        // cVI.draw(layer1_context)
+        // layer1_context.rect(100,100,100,100)
+        layer1.addEventListener("mousemove", function (e) {
+            // console.log(mystatus)
+            var mouseX = e.pageX - layer1.clientLeft;   // 鼠标相对页面坐标-画布距离边缘距离
+            var mouseY = e.pageY - layer1.clientTop;
+            layer1_context.beginPath();
+            layer1_context.clearRect(0, 0, 800, 600);
+            if (mystatus.drag) {
+                switch (mystatus.shape) {
+                    case ELLIPSE: //椭圆
+                        // alert("here")
+                        var point = cvi.p((mystatus.currentpoint.x + mouseX) / 2, (mystatus.currentpoint.y + mouseY) / 2)
+                        // cVI.ellipse(cvi.p(100,120),50,100)
+                        cVI.ellipse(point, Math.abs(mystatus.currentpoint.x - mouseX) / 2, Math.abs(mystatus.currentpoint.y - mouseY) / 2)
+
+                        break;
+                    case REACT: //矩形
+                        cVI.rect(cvi.rect(mystatus.currentpoint.x, mystatus.currentpoint.y, Math.abs(mystatus.currentpoint.x - mouseX), Math.abs(mystatus.currentpoint.y - mouseY)));
+
+                        break;
+                    case ROUNDREACT://圆角矩形
+                        // console.log(Math.min(Math.abs(mystatus.currentpoint.x-mouseX), Math.abs(mystatus.currentpoint.y-mouseY))/5)
+                        cVI.roundRect(cvi.rect(mystatus.currentpoint.x, mystatus.currentpoint.y, Math.abs(mystatus.currentpoint.x - mouseX), Math.abs(mystatus.currentpoint.y - mouseY)), Math.min(Math.abs(mystatus.currentpoint.x - mouseX), Math.abs(mystatus.currentpoint.y - mouseY)) / 5);
+
+                        break;
+                    case LINE://线段
+                        cVI.lineTo([mystatus.currentpoint, cvi.p(mouseX, mouseY)]);
+
+                        break;
+                    case STAR://星
+                    var max=Math.sqrt(Math.pow(mystatus.currentpoint.x - mouseX, 2) + Math.pow(mystatus.currentpoint.y - mouseY, 2))
+                        cVI.star(mystatus.currentpoint,
+                            max,max*0.4,
+                            buttonNum.value
+                        )
+
+                        break;
+                    case POLYGON://多边形
+                        cVI.polygon(mystatus.currentpoint,
+                            Math.sqrt(Math.pow(mystatus.currentpoint.x - mouseX, 2) + Math.pow(mystatus.currentpoint.y - mouseY, 2)),
+                            buttonNum.value
+                        )
+
+                        break;
+                    case PINCL://笔
+                        track.push(cvi.p(mouseX,mouseY))
+                        cVI.lineTo(track)
+                        break;
+                }
+                cVI.draw(layer1_context)
+                        cVI.children = [];
+
+            }
+        }, false)
+        layer1.addEventListener("mouseup", function (e) {
+            mystatus.drag = false;
+            mix()
+        }, false)
+        function mix() {
             backContext.save()
-            backContext.globalCompositeOperation="destination-over";
-            backContext.drawImage(layer1,0,0,800,600,0,0,800,600)
+            backContext.globalCompositeOperation = "destination-over";
+            backContext.drawImage(layer1, 0, 0, 800, 600, 0, 0, 800, 600)
             backContext.restore();
+            track=[]
         }
     </script>
 </body>
